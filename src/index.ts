@@ -1,5 +1,5 @@
 /**
- * @tinyland-inc/tinyland-admin-audit
+ * @tummycrypt/tinyland-admin-audit
  *
  * Admin audit logging with GDPR-compliant IP hashing and device detection.
  * Framework-agnostic via dependency injection configuration.
@@ -10,7 +10,7 @@
  *   configureAdminAudit,
  *   logAdminAction,
  *   type AuditRequestEvent,
- * } from '@tinyland-inc/tinyland-admin-audit';
+ * } from '@tummycrypt/tinyland-admin-audit';
  *
  * // Configure with your framework's implementations
  * configureAdminAudit({

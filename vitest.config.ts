@@ -1,5 +1,5 @@
 /**
- * Vitest Configuration for @tinyland-inc/tinyland-admin-audit
+ * Vitest Configuration for @tummycrypt/tinyland-admin-audit
  *
  * Works in three modes:
  *   1. Standalone:  cd packages/tinyland-admin-audit && pnpm test

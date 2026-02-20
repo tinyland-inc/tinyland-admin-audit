@@ -1,5 +1,5 @@
 {
-  "name": "@tinyland-inc/tinyland-admin-audit",
+  "name": "@tummycrypt/tinyland-admin-audit",
   "version": "0.1.0",
   "description": "Admin audit logging with GDPR-compliant IP hashing and device detection",
   "type": "module",
@@ -50,5 +50,9 @@
   },
   "engines": {
     "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   }
 }
