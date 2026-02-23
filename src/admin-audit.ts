@@ -1,16 +1,16 @@
-/**
- * Admin Audit Middleware - Phase 2.2
- *
- * Enhanced admin activity logging with full observability integration:
- * - Phase 1: IP hashing (GDPR-compliant)
- * - Phase 1: Device detection
- * - Phase 2: Distributed tracing (trace_id, span_id)
- * - Phase 2: Session context
- * - Phase 2: Before/after state tracking
- * - Loki integration for centralized logging
- *
- * @module admin-audit
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import { getAdminAuditConfig } from './config.js';
 import type { AuditRequestEvent } from './config.js';
@@ -22,9 +22,9 @@ import type {
   ResourceType,
 } from './types.js';
 
-/**
- * Extract client context from request event (Phase 1 integration)
- */
+
+
+
 export function extractClientContext(event: AuditRequestEvent) {
   const config = getAdminAuditConfig();
 
@@ -46,9 +46,9 @@ export function extractClientContext(event: AuditRequestEvent) {
   };
 }
 
-/**
- * Calculate fields that changed between before/after states
- */
+
+
+
 export function calculateChangedFields(
   before?: Record<string, any>,
   after?: Record<string, any>,
@@ -67,20 +67,20 @@ export function calculateChangedFields(
   return changedFields;
 }
 
-/**
- * Log an admin action with full observability context
- *
- * @example
- * ```typescript
- * await logAdminAction(event, 'UPDATE', 'user', {
- *   resourceId: 'user123',
- *   resourceName: 'jane@example.com',
- *   before: { role: 'user', status: 'active' },
- *   after: { role: 'admin', status: 'active' },
- *   metadata: { reason: 'Promotion request approved' }
- * });
- * ```
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export async function logAdminAction(
   event: AuditRequestEvent,
   action: AdminAction,
@@ -92,7 +92,7 @@ export async function logAdminAction(
 
   const { locals, request, url } = event;
 
-  // Require authenticated user
+  
   if (!locals.user) {
     logger.warn('Admin action attempted without authentication', {
       action,
@@ -102,35 +102,35 @@ export async function logAdminAction(
     return;
   }
 
-  // Extract client context (Phase 1)
+  
   const clientContext = extractClientContext(event);
 
-  // Generate trace IDs (Phase 2)
+  
   const traceId = config.generateId();
   const spanId = config.generateId();
 
-  // Calculate changes
+  
   const fieldsChanged = calculateChangedFields(options.before, options.after);
 
-  // Build audit log entry
+  
   const auditLog: AdminAuditLog = {
-    // Identity
+    
     timestamp: new Date().toISOString(),
     trace_id: traceId,
     span_id: spanId,
 
-    // Admin user
+    
     admin_user_id: locals.user.id,
     admin_username: locals.user.username || locals.user.email || locals.user.handle || 'unknown',
     admin_role: locals.user.role || 'unknown',
 
-    // Action
+    
     action,
     resource_type: resourceType,
     resource_id: options.resourceId,
     resource_name: options.resourceName,
 
-    // Changes
+    
     ...(options.before || options.after
       ? {
           changes: {
@@ -141,29 +141,29 @@ export async function logAdminAction(
         }
       : {}),
 
-    // Client context (Phase 1)
+    
     client_ip_hash: clientContext.clientIpHash,
     client_ip_masked: clientContext.clientIpMasked,
     user_agent: clientContext.userAgent,
     device_type: clientContext.deviceType,
 
-    // Session
+    
     session_id: locals.session?.id || 'no-session',
     browser_fingerprint: locals.session?.browserFingerprint,
 
-    // Request
+    
     request_path: url.pathname,
     request_method: request.method,
 
-    // Result
+    
     success: true,
     duration_ms: options.durationMs,
 
-    // Metadata
+    
     metadata: options.metadata,
   };
 
-  // Log to Loki with structured context
+  
   logger.info(
     `Admin ${action}: ${resourceType}${options.resourceId ? `/${options.resourceId}` : ''}`,
     {
@@ -195,9 +195,9 @@ export async function logAdminAction(
   );
 }
 
-/**
- * Log a failed admin action
- */
+
+
+
 export async function logAdminActionFailure(
   event: AuditRequestEvent,
   action: AdminAction,
@@ -281,9 +281,9 @@ export async function logAdminActionFailure(
   );
 }
 
-/**
- * Helper: Log user management actions
- */
+
+
+
 export async function logUserManagement(
   event: AuditRequestEvent,
   action: 'CREATE' | 'UPDATE' | 'DELETE' | 'INVITE',
@@ -300,9 +300,9 @@ export async function logUserManagement(
   });
 }
 
-/**
- * Helper: Log permission changes
- */
+
+
+
 export async function logPermissionChange(
   event: AuditRequestEvent,
   userId: string,
@@ -323,9 +323,9 @@ export async function logPermissionChange(
   });
 }
 
-/**
- * Helper: Log content management actions
- */
+
+
+
 export async function logContentManagement(
   event: AuditRequestEvent,
   action: 'CREATE' | 'UPDATE' | 'DELETE',
