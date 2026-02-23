@@ -1,11 +1,11 @@
-/**
- * Vitest Configuration for @tummycrypt/tinyland-admin-audit
- *
- * Works in three modes:
- *   1. Standalone:  cd packages/tinyland-admin-audit && pnpm test
- *   2. Workspace:   vitest run --project=tinyland-admin-audit (from root)
- *   3. Bazel:       bazel test //packages/tinyland-admin-audit:test
- */
+
+
+
+
+
+
+
+
 
 import { defineConfig } from 'vitest/config';
 import { fileURLToPath } from 'node:url';
