@@ -15,9 +15,9 @@ import {
   logContentManagement,
 } from '../src/admin-audit.js';
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+
+
+
 
 function createMockLogger(): Logger & {
   info: ReturnType<typeof vi.fn>;
@@ -57,9 +57,9 @@ function createMockEvent(overrides?: Partial<AuditRequestEvent>): AuditRequestEv
   };
 }
 
-// ---------------------------------------------------------------------------
-// Setup
-// ---------------------------------------------------------------------------
+
+
+
 
 let mockLogger: ReturnType<typeof createMockLogger>;
 
@@ -75,9 +75,9 @@ beforeEach(() => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// extractClientContext
-// ---------------------------------------------------------------------------
+
+
+
 
 describe('extractClientContext', () => {
   it('should return hashed IP from config.hashIp', () => {
@@ -161,14 +161,14 @@ describe('extractClientContext', () => {
       },
     });
     const ctx = extractClientContext(event);
-    // Empty string is falsy, so it falls back to 'unknown'
+    
     expect(ctx.userAgent).toBe('unknown');
   });
 });
 
-// ---------------------------------------------------------------------------
-// calculateChangedFields
-// ---------------------------------------------------------------------------
+
+
+
 
 describe('calculateChangedFields', () => {
   it('should return empty array when before is undefined', () => {
@@ -272,9 +272,9 @@ describe('calculateChangedFields', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// logAdminAction
-// ---------------------------------------------------------------------------
+
+
+
 
 describe('logAdminAction', () => {
   it('should log with full context when user is authenticated', async () => {
@@ -484,8 +484,8 @@ describe('logAdminAction', () => {
     await logAdminAction(event, 'UPDATE', 'user', {
       metadata: { reason: 'policy update' },
     });
-    // metadata is part of the auditLog object, not directly in the logger meta
-    // but the log call should still succeed
+    
+    
     expect(mockLogger.info).toHaveBeenCalledTimes(1);
   });
 
@@ -494,7 +494,7 @@ describe('logAdminAction', () => {
     await logAdminAction(event, 'DELETE', 'user', {
       before: { status: 'active' },
     });
-    // When only before is set, changes.after = {}
+    
     expect(mockLogger.info).toHaveBeenCalledTimes(1);
   });
 
@@ -509,7 +509,7 @@ describe('logAdminAction', () => {
   it('should not include changes when neither before nor after is provided', async () => {
     const event = createMockEvent();
     await logAdminAction(event, 'VIEW', 'user');
-    // The absence of changes means changes.fields_changed and changes.count are undefined
+    
     const [, meta] = mockLogger.info.mock.calls[0];
     expect(meta['changes.fields_changed']).toBeUndefined();
     expect(meta['changes.count']).toBeUndefined();
@@ -558,9 +558,9 @@ describe('logAdminAction', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// logAdminActionFailure
-// ---------------------------------------------------------------------------
+
+
+
 
 describe('logAdminActionFailure', () => {
   it('should log error with context for Error objects', async () => {
@@ -672,7 +672,7 @@ describe('logAdminActionFailure', () => {
       },
     });
     await logAdminActionFailure(event, 'DELETE', 'user', 'fail');
-    // The auditLog is built internally. We verify by checking the function ran without error.
+    
     expect(mockLogger.error).toHaveBeenCalledTimes(1);
   });
 
@@ -697,9 +697,9 @@ describe('logAdminActionFailure', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// logUserManagement
-// ---------------------------------------------------------------------------
+
+
+
 
 describe('logUserManagement', () => {
   it('should delegate to logAdminAction with "user" resource type', async () => {
@@ -763,9 +763,9 @@ describe('logUserManagement', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// logPermissionChange
-// ---------------------------------------------------------------------------
+
+
+
 
 describe('logPermissionChange', () => {
   it('should log role change with before/after', async () => {
@@ -814,9 +814,9 @@ describe('logPermissionChange', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// logContentManagement
-// ---------------------------------------------------------------------------
+
+
+
 
 describe('logContentManagement', () => {
   it('should delegate to logAdminAction with correct content type', async () => {
@@ -908,9 +908,9 @@ describe('logContentManagement', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// Edge cases & integration
-// ---------------------------------------------------------------------------
+
+
+
 
 describe('edge cases', () => {
   it('should handle event with GET method', async () => {
@@ -1017,7 +1017,7 @@ describe('edge cases', () => {
     });
     await logAdminAction(event, 'VIEW', 'user');
     const [, meta] = mockLogger.info.mock.calls[0];
-    // Empty string is falsy, so it should fall back to 'no-session'
+    
     expect(meta['session.id']).toBe('no-session');
   });
 
@@ -1037,7 +1037,7 @@ describe('edge cases', () => {
     await logAdminAction(event, 'VIEW', 'settings');
     const [, meta] = mockLogger.info.mock.calls[0];
     expect(meta['admin.user_id']).toBe('u-full');
-    expect(meta['admin.username']).toBe('fulluser'); // username takes priority
+    expect(meta['admin.username']).toBe('fulluser'); 
     expect(meta['admin.role']).toBe('super_admin');
   });
 });

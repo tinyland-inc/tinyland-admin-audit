@@ -155,7 +155,7 @@ describe('config', () => {
       const id = getAdminAuditConfig().generateId();
       expect(typeof id).toBe('string');
       expect(id.length).toBeGreaterThan(0);
-      // UUID format: 8-4-4-4-12 hex chars
+      
       expect(id).toMatch(
         /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
       );
@@ -164,8 +164,8 @@ describe('config', () => {
     it('should return a new config object reference each call', () => {
       const a = getAdminAuditConfig();
       const b = getAdminAuditConfig();
-      // The config object itself is shared (not cloned each call)
-      // but the function references should be the same
+      
+      
       expect(a.hashIp).toBe(b.hashIp);
     });
 
@@ -173,7 +173,7 @@ describe('config', () => {
       configureAdminAudit({ hashIp: (ip) => `custom_${ip}` });
       const result = getAdminAuditConfig();
       expect(result.hashIp('1.1.1.1')).toBe('custom_1.1.1.1');
-      // Other defaults remain
+      
       expect(result.detectDeviceType('ua')).toBe('unknown');
     });
   });
@@ -189,8 +189,8 @@ describe('config', () => {
       });
       resetAdminAuditConfig();
       const result = getAdminAuditConfig();
-      expect(result.hashIp('1.2.3.4')).toBe('1.2.3.4'); // default passthrough
-      expect(result.detectDeviceType('ua')).toBe('unknown'); // default
+      expect(result.hashIp('1.2.3.4')).toBe('1.2.3.4'); 
+      expect(result.detectDeviceType('ua')).toBe('unknown'); 
     });
 
     it('should restore default logger after reset', () => {
