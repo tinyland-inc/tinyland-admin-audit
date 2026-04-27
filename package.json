@@ -1,6 +1,6 @@
 {
   "name": "@tummycrypt/tinyland-admin-audit",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Admin audit logging with GDPR-compliant IP hashing and device detection",
   "type": "module",
   "license": "Zlib AND LicenseRef-Tinyland-Proprietary",
@@ -21,11 +21,12 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
-    "test": "vitest",
+    "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest --coverage",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm build && pnpm check:package",
+    "check:package": "publint"
   },
   "keywords": [
     "admin",
@@ -39,21 +40,25 @@
   "author": "Tinyland.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tinyland-inc/tinyland.dev",
-    "directory": "packages/tinyland-admin-audit"
+    "url": "git+https://github.com/tinyland-inc/tinyland-admin-audit.git"
   },
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^22.0.0",
     "typescript": "^5.0.0",
-    "vitest": "^4.0.0"
+    "vitest": "^4.0.0",
+    "publint": "^0.3.18"
   },
   "engines": {
     "node": ">=22.0.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
-    "access": "public",
-    "provenance": true
+    "access": "public"
+  },
+  "packageManager": "pnpm@10.13.1",
+  "homepage": "https://github.com/tinyland-inc/tinyland-admin-audit",
+  "bugs": {
+    "url": "https://github.com/tinyland-inc/tinyland-admin-audit/issues"
   }
 }
